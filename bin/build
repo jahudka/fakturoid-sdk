@@ -1,0 +1,87 @@
+#!/usr/bin/env php
+<?php
+
+$composer = getenv('COMPOSER_PATH') ?: 'composer';
+$basePath = realpath(__DIR__ . '/..');
+$distPath = $basePath . '/dist';
+$tmpPath = $distPath . '/.tmp';
+$pharPath = $distPath . '/fakturoid-sdk.phar';
+$zipPath = $distPath . '/fakturoid-sdk.zip';
+
+function run_command($command, array $args = null, $workDir = null) {
+    if (!$args) {
+        $args = [];
+    }
+
+    array_unshift($args, $command);
+    $command = implode(' ', array_map('escapeshellarg', $args)) . ' 2>&1';
+
+    if ($workDir) {
+        $cwd = getcwd();
+        chdir($workDir);
+    }
+
+    exec($command, $out, $return);
+
+    if (isset($cwd)) {
+        chdir($cwd);
+    }
+
+    if ($return !== 0) {
+        echo " error:\n";
+        echo implode('', $out);
+        echo "\n";
+        exit(-1);
+    }
+}
+
+@mkdir($tmpPath, 0755, true);
+@unlink($pharPath);
+@unlink($zipPath);
+
+echo "Copying sources...";
+
+run_command('cp', ['-r', $basePath . '/src', $tmpPath . '/src']);
+
+if (!copy($basePath . '/composer.json', $tmpPath . '/composer.json')) {
+    echo " error:\nError copying composer.json.\n";
+    exit(-1);
+}
+
+echo " done.\n";
+
+echo "Installing dependencies...";
+
+run_command($composer, ['install', '--no-dev', '--no-progress', '--no-suggest', '--no-interaction'], $tmpPath);
+
+echo " done.\n";
+
+echo "Building phar...";
+
+$phar = new Phar($pharPath);
+$phar->buildFromDirectory($tmpPath);
+
+$phar->setStub(implode("\n", [
+    "<?php\n",
+    'Phar::mapPhar(\fakturoid-sdk.phar\');',
+    'Phar::interceptFileFuncs();',
+    'require \'phar://fakturoid-sdk.phar/vendor/autoload.php\';',
+    '__HALT_COMPILER();',
+]));
+
+echo " done.\n";
+
+echo "Building zip...";
+
+$zip = new ZipArchive();
+$zip->open($zipPath, ZipArchive::CREATE | ZipArchive::EXCL);
+$zip->addFile($pharPath, basename($pharPath));
+$zip->close();
+
+echo " done.\n";
+
+echo "Cleaning up...";
+
+run_command('rm', ['-r', '-f', $tmpPath]);
+
+echo " done.\n";
