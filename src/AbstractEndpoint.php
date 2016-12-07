@@ -40,6 +40,27 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
     }
 
     /**
+     * @return Client
+     */
+    public function getClient() {
+        return $this->api;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl() {
+        return $this->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityClass() {
+        return $this->entityClass;
+    }
+
+    /**
      * @return array
      */
     protected abstract function getKnownOptions();

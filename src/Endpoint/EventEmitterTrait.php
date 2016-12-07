@@ -10,11 +10,15 @@ use Jahudka\FakturoidSDK\Client;
 
 trait EventEmitterTrait {
 
-    /** @var Client */
-    protected $api;
+    /**
+     * @return Client
+     */
+    public abstract function getClient();
 
-    /** @var string */
-    protected $url;
+    /**
+     * @return string
+     */
+    public abstract function getUrl();
 
     /**
      * @param Response $response
@@ -35,7 +39,7 @@ trait EventEmitterTrait {
             $entity = $entity->getId();
         }
 
-        $response = $this->api->sendRequest($this->url . '/' . $entity . '/fire.json?event=' . $event, 'POST', $data);
+        $response = $this->getClient()->sendRequest($this->getUrl() . '/' . $entity . '/fire.json?event=' . $event, 'POST', $data);
         $this->assertStatus($response, 200);
         return $this;
     }

@@ -6,9 +6,6 @@ namespace Jahudka\FakturoidSDK\Entity;
 
 trait TaggableTrait {
 
-    /** @var array */
-    protected $data;
-
     /**
      * @param string $tag
      * @return $this
