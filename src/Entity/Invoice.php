@@ -3,7 +3,6 @@
 
 namespace Jahudka\FakturoidSDK\Entity;
 
-use Jahudka\FakturoidSDK\AbstractEntity;
 use Jahudka\FakturoidSDK\Utils;
 
 
@@ -29,7 +28,6 @@ use Jahudka\FakturoidSDK\Utils;
  * @property-read string $clientCountry
  * @property-read string $clientRegistrationNo
  * @property-read string $clientVatNo
- * @property int $subjectId
  * @property int $generatorId
  * @property int $relatedId
  * @property bool $correction
@@ -49,35 +47,16 @@ use Jahudka\FakturoidSDK\Utils;
  * @property string $note
  * @property string $footerNote
  * @property string $privateNote
- * @property array $tags
- * @property int $bankAccountId
- * @property string $bankAccount
- * @property string $iban
- * @property string $swiftBic
- * @property string $paymentMethod
- * @property string $currency
- * @property string $exchangeRate
  * @property bool $paypal
  * @property bool $gopay
  * @property string $language
- * @property bool $transferredTaxLiability
  * @property int $supplyCode
  * @property bool $euElectronicService
- * @property string $vatPriceMode
  * @property bool $roundTotal
- * @property-read float $subtotal
- * @property-read float $nativeSubtotal
- * @property-read float $total
- * @property-read float $nativeTotal
  * @property-read float $remainingAmount
  * @property-read float $remainingNativeAmount
- * @property-read string $htmlUrl
  * @property-read string $publicHtmlUrl
- * @property-read string $url
  * @property-read string $pdfUrl
- * @property-read string $subjectUrl
- * @property-read \DateTime $updatedAt
- * @property \ArrayObject|Line[] $lines
  *
  * @method string getCustomId()
  * @method bool isProforma()
@@ -100,7 +79,6 @@ use Jahudka\FakturoidSDK\Utils;
  * @method string getClientCountry()
  * @method string getClientRegistrationNo()
  * @method string getClientVatNo()
- * @method int getSubjectId()
  * @method int getGeneratorId()
  * @method int getRelatedId()
  * @method bool isCorrection()
@@ -116,44 +94,26 @@ use Jahudka\FakturoidSDK\Utils;
  * @method \DateTime getPaidAt()
  * @method \DateTime getReminderSentAt()
  * @method \DateTime getAcceptedAt()
+ * @method \DateTime getCanceledAt()
  * @method string getNote()
  * @method string getFooterNote()
  * @method string getPrivateNote()
- * @method array getTags()
- * @method int getBankAccountId()
- * @method string getBankAccount()
- * @method string getIban()
- * @method string getSwiftBic()
- * @method string getPaymentMethod()
- * @method string getCurrency()
- * @method string getExchangeRate()
  * @method bool isPaypal()
  * @method bool isGopay()
  * @method string getLanguage()
- * @method bool isTransferredTaxLiability()
  * @method int getSupplyCode()
  * @method bool isEuElectronicService()
- * @method string getVatPriceMode()
  * @method bool isRoundTotal()
- * @method float getSubtotal()
- * @method float getNativeSubtotal()
- * @method float getTotal()
- * @method float getNativeTotal()
  * @method float getRemainingAmount()
  * @method float getRemainingNativeAmount()
- * @method string getHtmlUrl()
  * @method string getPublicHtmlUrl()
- * @method string getUrl()
  * @method string getPdfUrl()
- * @method string getSubjectUrl()
- * @method \DateTime getUpdatedAt()
  *
  * @method $this setCustomId(string $customId)
  * @method $this setProforma(bool $proforma)
  * @method $this setPartialProforma(bool $partialProforma)
  * @method $this setNumber(string $number)
  * @method $this setVariableSymbol(string $variableSymbol)
- * @method $this setSubjectId(int $subjectId)
  * @method $this setGeneratorId(int $generatorId)
  * @method $this setRelatedId(int $relatedId)
  * @method $this setCorrection(bool $correction)
@@ -165,33 +125,20 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setNote(string $note)
  * @method $this setFooterNote(string $footerNote)
  * @method $this setPrivateNote(string $privateNote)
- * @method $this setTags(array $tags)
- * @method $this setBankAccountId(int $bankAccountId)
- * @method $this setBankAccount(string $bankAccount)
- * @method $this setIban(string $iban)
- * @method $this setSwiftBic(string $swiftBic)
- * @method $this setPaymentMethod(string $paymentMethod)
- * @method $this setCurrency(string $currency)
- * @method $this setExchangeRate(string $exchangeRate)
  * @method $this setPaypal(bool $paypal)
  * @method $this setGopay(bool $gopay)
  * @method $this setLanguage(string $language)
- * @method $this setTransferredTaxLiability(bool $transferredTaxLiability)
  * @method $this setSupplyCode(int $supplyCode)
  * @method $this setEuElectronicService(bool $euElectronicService)
- * @method $this setVatPriceMode(string $vatPriceMode)
  * @method $this setRoundTotal(bool $roundTotal)
  */
-class Invoice extends AbstractEntity {
-    use TaggableTrait,
-        LinesTrait;
+class Invoice extends AbstractBillable {
 
     /**
      * @return array
      */
     public function getKnownProperties() {
-        return [
-            'id',
+        return array_merge(parent::getKnownProperties(), [
             'customId',
             'proforma',
             'partialProforma',
@@ -213,7 +160,6 @@ class Invoice extends AbstractEntity {
             'clientCountry',
             'clientRegistrationNo',
             'clientVatNo',
-            'subjectId',
             'generatorId',
             'relatedId',
             'correction',
@@ -233,43 +179,24 @@ class Invoice extends AbstractEntity {
             'note',
             'footerNote',
             'privateNote',
-            'tags',
-            'bankAccountId',
-            'bankAccount',
-            'iban',
-            'swiftBic',
-            'paymentMethod',
-            'currency',
-            'exchangeRate',
             'paypal',
             'gopay',
             'language',
-            'transferredTaxLiability',
             'supplyCode',
             'euElectronicService',
-            'vatPriceMode',
             'roundTotal',
-            'subtotal',
-            'nativeSubtotal',
-            'total',
-            'nativeTotal',
             'remainingAmount',
             'remainingNativeAmount',
-            'htmlUrl',
             'publicHtmlUrl',
-            'url',
             'pdfUrl',
-            'subjectUrl',
-            'updatedAt',
-            'lines',
-        ];
+        ]);
     }
 
     /**
      * @return array
      */
     public function getReadonlyProperties() {
-        return [
+        return array_merge(parent::getReadonlyProperties(), [
             'yourName',
             'yourStreet',
             'yourStreet2',
@@ -294,37 +221,11 @@ class Invoice extends AbstractEntity {
             'reminderSentAt',
             'acceptedAt',
             'canceledAt',
-            'subtotal',
-            'nativeSubtotal',
-            'total',
-            'nativeTotal',
             'remainingAmount',
             'remainingNativeAmount',
-            'htmlUrl',
             'publicHtmlUrl',
-            'url',
             'pdfUrl',
-            'subjectUrl',
-            'updatedAt',
-        ];
-    }
-
-    /**
-     * @param array $data
-     * @return $this
-     */
-    public function setData(array $data) {
-        $data = $this->importLines($data);
-        return parent::setData($data);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray() {
-        $data = parent::toArray();
-        $data = $this->exportLines($data);
-        return $data;
+        ]);
     }
 
     /**
@@ -332,7 +233,7 @@ class Invoice extends AbstractEntity {
      * @return \DateTime|mixed|null
      */
     public function __get($name) {
-        if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn', 'sentAt', 'paidAt', 'reminderSentAt', 'acceptedAt', 'canceledAt', 'updatedAt'], true)) {
+        if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn', 'sentAt', 'paidAt', 'reminderSentAt', 'acceptedAt', 'canceledAt'], true)) {
             return isset($this->data[$name]) ? new \DateTime($this->data[$name]) : null;
         }
 

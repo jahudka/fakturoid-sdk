@@ -3,7 +3,6 @@
 
 namespace Jahudka\FakturoidSDK\Entity;
 
-use Jahudka\FakturoidSDK\AbstractEntity;
 use Jahudka\FakturoidSDK\Utils;
 
 
@@ -19,7 +18,6 @@ use Jahudka\FakturoidSDK\Utils;
  * @property-read string $supplierCountry
  * @property-read string $supplierRegistrationNo
  * @property-read string $supplierVatNo
- * @property int $subjectId
  * @property-read string $status
  * @property string $documentType
  * @property \DateTime $issuedOn
@@ -28,29 +26,10 @@ use Jahudka\FakturoidSDK\Utils;
  * @property-read \DateTime $paidOn
  * @property string $description
  * @property string $privateNote
- * @property array $tags
- * @property int $bankAccountId
- * @property string $bankAccount
- * @property string $iban
- * @property string $swiftBic
- * @property string $paymentMethod
- * @property string $currency
- * @property string $exchangeRate
- * @property bool $transferredTaxLiability
- * @property string $vatPriceMode
  * @property int $supplyCode
  * @property bool $roundTotal
- * @property-read float $subtotal
- * @property-read float $nativeSubtotal
- * @property-read float $total
- * @property-read float $nativeTotal
  * @property Attachment $attachment
- * @property-read string $htmlUrl
- * @property-read string $url
- * @property-read string $subjectUrl
  * @property-read \DateTime $createdAt
- * @property-read \DateTime $updatedAt
- * @property \ArrayObject|Line[] $lines
  *
  * @method string getNumber()
  * @method string getOriginalNumber()
@@ -63,7 +42,6 @@ use Jahudka\FakturoidSDK\Utils;
  * @method string getSupplierCountry()
  * @method string getSupplierRegistrationNo()
  * @method string getSupplierVatNo()
- * @method int getSubjectId()
  * @method string getStatus()
  * @method string getDocumentType()
  * @method \DateTime getIssuedOn()
@@ -72,62 +50,30 @@ use Jahudka\FakturoidSDK\Utils;
  * @method \DateTime getPaidOn()
  * @method string getDescription()
  * @method string getPrivateNote()
- * @method array getTags()
- * @method int getBankAccountId()
- * @method string getBankAccount()
- * @method string getIban()
- * @method string getSwiftBic()
- * @method string getPaymentMethod()
- * @method string getCurrency()
- * @method string getExchangeRate()
- * @method bool isTransferredTaxLiability()
- * @method string getVatPriceMode()
  * @method int getSupplyCode()
  * @method bool isRoundTotal()
- * @method float getSubtotal()
- * @method float getNativeSubtotal()
- * @method float getTotal()
- * @method float getNativeTotal()
  * @method Attachment getAttachment()
- * @method string getHtmlUrl()
- * @method string getUrl()
- * @method string getSubjectUrl()
  * @method \DateTime getCreatedAt()
- * @method \DateTime getUpdatedAt()
  *
  * @method $this setNumber(string $number)
  * @method $this setOriginalNumber(string $originalNumber)
  * @method $this setVariableSymbol(string $variableSymbol)
- * @method $this setSubjectId(int $subjectId)
  * @method $this setDocumentType(string $documentType)
  * @method $this setIssuedOn(\DateTime $issuedOn)
  * @method $this setTaxableFulfillmentDue(\DateTime $taxableFulfillmentDue)
  * @method $this setDueOn(\DateTime $dueOn)
  * @method $this setDescription(string $description)
  * @method $this setPrivateNote(string $privateNote)
- * @method $this setTags(array $tags)
- * @method $this setBankAccountId(int $bankAccountId)
- * @method $this setBankAccount(string $bankAccount)
- * @method $this setIban(string $iban)
- * @method $this setSwiftBic(string $swiftBic)
- * @method $this setPaymentMethod(string $paymentMethod)
- * @method $this setCurrency(string $currency)
- * @method $this setExchangeRate(string $exchangeRate)
- * @method $this setTransferredTaxLiability(bool $transferredTaxLiability)
- * @method $this setVatPriceMode(string $vatPriceMode)
  * @method $this setSupplyCode(int $supplyCode)
  * @method $this setRoundTotal(bool $roundTotal)
  */
-class Expense extends AbstractEntity {
-    use TaggableTrait,
-        LinesTrait;
+class Expense extends AbstractBillable {
 
     /**
      * @return array
      */
     public function getKnownProperties() {
-        return [
-            'id',
+        return array_merge(parent::getKnownProperties(), [
             'number',
             'originalNumber',
             'variableSymbol',
@@ -139,7 +85,6 @@ class Expense extends AbstractEntity {
             'supplierCountry',
             'supplierRegistrationNo',
             'supplierVatNo',
-            'subjectId',
             'status',
             'documentType',
             'issuedOn',
@@ -148,37 +93,18 @@ class Expense extends AbstractEntity {
             'paidOn',
             'description',
             'privateNote',
-            'tags',
-            'bankAccountId',
-            'bankAccount',
-            'iban',
-            'swiftBic',
-            'paymentMethod',
-            'currency',
-            'exchangeRate',
-            'transferredTaxLiability',
-            'vatPriceMode',
             'supplyCode',
             'roundTotal',
-            'subtotal',
-            'nativeSubtotal',
-            'total',
-            'nativeTotal',
             'attachment',
-            'htmlUrl',
-            'url',
-            'subjectUrl',
             'createdAt',
-            'updatedAt',
-            'lines',
-        ];
+        ]);
     }
 
     /**
      * @return array
      */
     public function getReadonlyProperties() {
-        return [
+        return array_merge(parent::getReadonlyProperties(), [
             'supplierName',
             'supplierStreet',
             'supplierStreet2',
@@ -189,16 +115,8 @@ class Expense extends AbstractEntity {
             'supplierVatNo',
             'status',
             'paidOn',
-            'subtotal',
-            'nativeSubtotal',
-            'total',
-            'nativeTotal',
-            'htmlUrl',
-            'url',
-            'subjectUrl',
             'createdAt',
-            'updatedAt',
-        ];
+        ]);
     }
 
     /**
@@ -206,8 +124,6 @@ class Expense extends AbstractEntity {
      * @return $this
      */
     public function setData(array $data) {
-        $data = $this->importLines($data);
-
         if (isset($data['attachment'])) {
             $data['attachment'] = new Attachment($data['attachment']);
         }
@@ -220,7 +136,6 @@ class Expense extends AbstractEntity {
      */
     public function toArray() {
         $data = parent::toArray();
-        $data = $this->exportLines($data);
 
         if (isset($data['attachment'])) {
             if ($data['attachment']->isNew()) {
@@ -253,7 +168,7 @@ class Expense extends AbstractEntity {
      * @return \DateTime|mixed|null
      */
     public function __get($name) {
-        if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn', 'paidOn', 'createdAt', 'updatedAt'], true)) {
+        if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn', 'paidOn', 'createdAt'], true)) {
             return isset($this->data[$name]) ? new \DateTime($this->data[$name]) : null;
         }
 

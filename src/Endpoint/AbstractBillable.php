@@ -9,10 +9,25 @@ use Jahudka\FakturoidSDK\Utils;
 
 
 abstract class AbstractBillable extends AbstractEndpoint  {
-    use EventEmitterTrait,
-        SearchableTrait,
+    use SearchableTrait,
         DateFilterableTrait,
         SubjectFilterableTrait;
+
+    /**
+     * @param AbstractEntity|int $entity
+     * @param string $event
+     * @param array $data
+     * @return $this
+     */
+    protected function fireEvent($entity, $event, array $data = null) {
+        if ($entity instanceof AbstractEntity) {
+            $entity = $entity->getId();
+        }
+
+        $response = $this->api->sendRequest($this->url . '/' . $entity . '/fire.json?event=' . $event, 'POST', $data);
+        $this->assertStatus($response, 200);
+        return $this;
+    }
 
     /**
      * @param AbstractEntity|int $expense
