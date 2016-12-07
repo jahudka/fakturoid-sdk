@@ -1,0 +1,17 @@
+language: php
+php:
+    - '5.6'
+    - '7.0'
+install:
+    - composer install
+script:
+    - vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/
+    - bin/build
+deploy:
+    provider: releases
+    api_key:
+        secure: EGZ+hfuEoOfqIiO0XDifow26x51YuS6+3yKHfrBKXHjFv+4bWp6zsVqfuWHo5VbzGWGAG9SKG8f/M6xxzY1qZ5sRqy+TtxRDhGLtblqpvkFsoisQTLMDABu59RwqFn0o62GSFFOvl8LXB6tkVJArbyOXOmivl0seg0krD13elQHfy4APFinjUypyTwCcu+3icq2mvyG1QEuOIQAx4HjQUKz9VjirHSe8ToG9bZxt5UC25B9D0NH3qMXKHggi9qRs/eXQZ1m9HnHMCR3HXzMAm63E8Zl8tVaXSzmG30q99XHJfU8KGrFTffjGIbFj/MhZoILnddVuO/z9ZRIxeu98Zs0HgiDiAaIBwejvzetyXODUCT2eTeNBQUjI1Afl48Ut0aiO+tiBwCgXuEAx7w//pHcdXAR+yRM/9pH5QktyS1DRhcMtF3Czo3Uy9fevO0tOyALBle6DdRQxv88OmiMoMQlwnLPusH86UJAxjhtxFD5nTBWjr2sdo+vmCA62/bnFFlNguYYYBseNBdACA1BFLiqnVSedQmyv5sLQQQEw255Rpsg1pHbWkgKoC20XHX+kB8ynk2oCm569YoIblJHbD+cjNDv3+PG9k4yEz6VpSIKWaeaevvZIc2IrMGk9xctqntvYt8DlQ6sWsthzGzM+t6nIQ5p6ZsiQ7mAKzVwC1uY=
+    file: dist/fakturoid-sdk.zip
+    skip_cleanup: true
+    on:
+        tags: true
