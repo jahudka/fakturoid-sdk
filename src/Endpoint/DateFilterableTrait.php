@@ -20,7 +20,7 @@ trait DateFilterableTrait {
      * @return $this
      */
     public function since($date) {
-        return $this->setOption('since', Utils::formatDate($date));
+        return $this->setOption('since', Utils::formatDateTime($date));
     }
 
     /**
@@ -28,7 +28,7 @@ trait DateFilterableTrait {
      * @return $this
      */
     public function updatedSince($date) {
-        return $this->setOption('updated_since', Utils::formatDate($date));
+        return $this->setOption('updated_since', Utils::formatDateTime($date));
     }
 
 }
