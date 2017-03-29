@@ -20,6 +20,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @property bool $sendEmail
  * @property string $language
  * @property bool $euElectronicService
+ * @property string $note
  *
  * @method string getName()
  * @method bool isRecurring()
@@ -34,6 +35,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @method bool isSendEmail()
  * @method string getLanguage()
  * @method bool isEuElectronicService()
+ * @method string getNote()
  *
  * @method $this setName(string $name)
  * @method $this setRecurring(bool $recurring)
@@ -48,6 +50,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setSendEmail(bool $sendEmail)
  * @method $this setLanguage(string $language)
  * @method $this setEuElectronicService(bool $euElectronicService)
+ * @method $this setNote(string $note)
  */
 class Generator extends AbstractBillable {
 
@@ -66,6 +69,7 @@ class Generator extends AbstractBillable {
             'sendEmail',
             'language',
             'euElectronicService',
+            'note',
         ]);
     }
 
