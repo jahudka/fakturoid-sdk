@@ -46,12 +46,30 @@ class Invoices extends AbstractBillable {
         return [
             'since',
             'updated_since',
+            'until',
+            'updated_until',
             'custom_id',
             'subject_id',
             'number',
             'status',
             'query',
         ];
+    }
+
+    /**
+     * @param \DateTime|string|int $date
+     * @return $this
+     */
+    public function until($date) {
+        return $this->setOption('until', Utils::formatDateTime($date));
+    }
+
+    /**
+     * @param \DateTime|string|int $date
+     * @return $this
+     */
+    public function updatedUntil($date) {
+        return $this->setOption('updated_until', Utils::formatDateTime($date));
     }
 
     /**
