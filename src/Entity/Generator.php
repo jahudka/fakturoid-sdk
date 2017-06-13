@@ -16,6 +16,8 @@ use Jahudka\FakturoidSDK\Utils;
  * @property \DateTime $endDate
  * @property int $monthsPeriod
  * @property \DateTime $nextOccurrenceOn
+ * @property bool $lastDayInMonth
+ * @property bool $taxDateAtEndOfLastMonth
  * @property int $due
  * @property bool $sendEmail
  * @property string $language
@@ -31,6 +33,8 @@ use Jahudka\FakturoidSDK\Utils;
  * @method \DateTime getEndDate()
  * @method int getMonthsPeriod()
  * @method \DateTime getNextOccurrenceOn()
+ * @method bool isLastDayInMonth()
+ * @method bool isTaxDateAtEndOfLastMonth()
  * @method int getDue()
  * @method bool isSendEmail()
  * @method string getLanguage()
@@ -46,6 +50,8 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setEndDate(\DateTime $endDate)
  * @method $this setMonthsPeriod(int $monthsPeriod)
  * @method $this setNextOccurrenceOn(\DateTime $nextOccurrenceOn)
+ * @method $this setLastDayInMonth(bool $lastDayInMonth)
+ * @method $this setTaxDateAtEndOfLastMonth(bool $taxDateAtEndOfLastMonth)
  * @method $this setDue(int $due)
  * @method $this setSendEmail(bool $sendEmail)
  * @method $this setLanguage(string $language)
@@ -65,6 +71,8 @@ class Generator extends AbstractBillable {
             'endDate',
             'monthsPeriod',
             'nextOccurrenceOn',
+            'lastDayInMonth',
+            'taxDateAtEndOfLastMonth',
             'due',
             'sendEmail',
             'language',
