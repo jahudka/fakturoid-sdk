@@ -21,6 +21,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @property int $due
  * @property bool $sendEmail
  * @property string $language
+ * @property int $supplyCode
  * @property bool $euElectronicService
  * @property string $note
  *
@@ -38,6 +39,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @method int getDue()
  * @method bool isSendEmail()
  * @method string getLanguage()
+ * @method int getSupplyCode()
  * @method bool isEuElectronicService()
  * @method string getNote()
  *
@@ -55,6 +57,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setDue(int $due)
  * @method $this setSendEmail(bool $sendEmail)
  * @method $this setLanguage(string $language)
+ * @method $this setSupplyCode(int $supplyCode)
  * @method $this setEuElectronicService(bool $euElectronicService)
  * @method $this setNote(string $note)
  */
@@ -76,6 +79,7 @@ class Generator extends AbstractBillable {
             'due',
             'sendEmail',
             'language',
+            'supplyCode',
             'euElectronicService',
             'note',
         ]);
