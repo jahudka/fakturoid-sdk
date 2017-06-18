@@ -23,6 +23,14 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method string getInvoiceUrl()
  * @method string getSubjectUrl()
  * @method User getUser()
+ *
+ * @method bool hasName()
+ * @method bool hasInvoiceId()
+ * @method bool hasSubjectId()
+ * @method bool hasText()
+ * @method bool hasInvoiceUrl()
+ * @method bool hasSubjectUrl()
+ * @method bool hasUser()
  */
 class Event extends AbstractEntity {
 

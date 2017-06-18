@@ -10,6 +10,14 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @property-read string $fileName
  * @property-read string $contentType
  * @property-read string $downloadUrl
+ *
+ * @method string getFileName()
+ * @method string getContentType()
+ * @method string getDownloadUrl()
+ *
+ * @method bool hasFileName()
+ * @method bool hasContentType()
+ * @method bool hasDownloadUrl()
  */
 class Attachment extends AbstractEntity {
 

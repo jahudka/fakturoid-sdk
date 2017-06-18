@@ -15,13 +15,13 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @property string $swiftBic
  * @property string $paymentMethod
  * @property string $currency
- * @property float $exchangeRate
+ * @property string $exchangeRate
  * @property bool $transferredTaxLiability
  * @property string $vatPriceMode
- * @property-read float $subtotal
- * @property-read float $nativeSubtotal
- * @property-read float $total
- * @property-read float $nativeTotal
+ * @property-read string $subtotal
+ * @property-read string $nativeSubtotal
+ * @property-read string $total
+ * @property-read string $nativeTotal
  * @property-read string $url
  * @property-read string $htmlUrl
  * @property-read string $subjectUrl
@@ -39,13 +39,32 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method string getExchangeRate()
  * @method bool isTransferredTaxLiability()
  * @method string getVatPriceMode()
- * @method float getSubtotal()
- * @method float getNativeSubtotal()
- * @method float getTotal()
- * @method float getNativeTotal()
+ * @method string getSubtotal()
+ * @method string getNativeSubtotal()
+ * @method string getTotal()
+ * @method string getNativeTotal()
  * @method string getUrl()
  * @method string getHtmlUrl()
  * @method string getSubjectUrl()
+ *
+ * @method bool hasSubjectId()
+ * @method bool hasTags()
+ * @method bool hasBankAccountId()
+ * @method bool hasBankAccount()
+ * @method bool hasIban()
+ * @method bool hasSwiftBic()
+ * @method bool hasPaymentMethod()
+ * @method bool hasCurrency()
+ * @method bool hasExchangeRate()
+ * @method bool hasTransferredTaxLiability()
+ * @method bool hasVatPriceMode()
+ * @method bool hasSubtotal()
+ * @method bool hasNativeSubtotal()
+ * @method bool hasTotal()
+ * @method bool hasNativeTotal()
+ * @method bool hasUrl()
+ * @method bool hasHtmlUrl()
+ * @method bool hasSubjectUrl()
  *
  * @method $this setSubjectId(int $subjectId)
  * @method $this setTags(array $tags)

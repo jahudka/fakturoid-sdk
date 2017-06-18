@@ -8,6 +8,7 @@ namespace Jahudka\FakturoidSDK;
  * @property int $id
  * @method int getId()
  * @method $this setId(int $id)
+ * @method bool hasId()
  */
 abstract class AbstractEntity {
 
@@ -74,7 +75,7 @@ abstract class AbstractEntity {
             throw new MemberAccessException("Trying to access non-existent property '$name' of class $class");
         }
 
-        return $this->data[$name];
+        return array_key_exists($name, $this->data) ? $this->data[$name] : null;
     }
 
     /**
@@ -113,13 +114,16 @@ abstract class AbstractEntity {
      * @throws ReadonlyEntityException
      */
     public function __call($name, $args) {
-        if (preg_match('/^(get|set|is)([A-Z].*)$/', $name, $m)) {
+        if (preg_match('/^(get|set|is|has)([A-Z].*)$/', $name, $m)) {
             switch ($m[1]) {
                 case 'get':
                     return $this->__get(lcfirst($m[2]));
 
                 case 'is':
                     return (bool) $this->__get(lcfirst($m[2]));
+
+                case 'has':
+                    return $this->__isset(lcfirst($m[2]));
 
                 case 'set':
                     if (empty($args)) {

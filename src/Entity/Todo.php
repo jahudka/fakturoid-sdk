@@ -24,6 +24,14 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method string getText()
  * @method string getInvoiceUrl()
  * @method string getSubjectUrl()
+
+ * @method bool hasId()
+ * @method bool hasName()
+ * @method bool hasInvoiceId()
+ * @method bool hasSubjectId()
+ * @method bool hasText()
+ * @method bool hasInvoiceUrl()
+ * @method bool hasSubjectUrl()
  */
 class Todo extends AbstractEntity {
 

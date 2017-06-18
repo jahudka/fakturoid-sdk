@@ -8,25 +8,33 @@ use Jahudka\FakturoidSDK\AbstractEntity;
 
 /**
  * @property string $name
- * @property float $quantity
+ * @property string $quantity
  * @property string $unitName
- * @property float $unitPrice
+ * @property string $unitPrice
  * @property int $vatRate
- * @property-read float $unitPriceWithoutVat
- * @property-read float $unitPriceWithVat
+ * @property-read string $unitPriceWithoutVat
+ * @property-read string $unitPriceWithVat
  *
  * @method string getName()
- * @method float getQuantity()
+ * @method string getQuantity()
  * @method string getUnitName()
- * @method float getUnitPrice()
+ * @method string getUnitPrice()
  * @method int getVatRate()
- * @method float getUnitPriceWithoutVat()
- * @method float getUnitPriceWithVat()
+ * @method string getUnitPriceWithoutVat()
+ * @method string getUnitPriceWithVat()
+ *
+ * @method bool hasName()
+ * @method bool hasQuantity()
+ * @method bool hasUnitName()
+ * @method bool hasUnitPrice()
+ * @method bool hasVatRate()
+ * @method bool hasUnitPriceWithoutVat()
+ * @method bool hasUnitPriceWithVat()
  *
  * @method $this setName(string $name)
- * @method $this setQuantity(float $quantity)
+ * @method $this setQuantity(string $quantity)
  * @method $this setUnitName(string $unitName)
- * @method $this setUnitPrice(float $unitPrice)
+ * @method $this setUnitPrice(string $unitPrice)
  * @method $this setVatRate(int $vatRate)
  */
 class Line extends AbstractEntity {

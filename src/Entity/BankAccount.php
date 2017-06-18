@@ -21,6 +21,14 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method string getSwiftBic()
  * @method bool isPairing()
  * @method bool isPaymentAdjustment()
+ *
+ * @method bool hasName()
+ * @method bool hasNumber()
+ * @method bool hasCurrency()
+ * @method bool hasIban()
+ * @method bool hasSwiftBic()
+ * @method bool hasPairing()
+ * @method bool hasPaymentAdjustment()
  */
 class BankAccount extends AbstractEntity {
 

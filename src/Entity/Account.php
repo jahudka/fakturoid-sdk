@@ -16,6 +16,11 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method string getLogo()
  * @method string getName()
  * @method string getPermission()
+ *
+ * @method bool hasSlug()
+ * @method bool hasLogo()
+ * @method bool hasName()
+ * @method bool hasPermission()
  */
 class Account extends AbstractEntity {
 

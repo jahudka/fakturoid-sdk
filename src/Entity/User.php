@@ -18,6 +18,12 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method string getEmail()
  * @method string getAvatarUrl()
  * @method Account[] getAccounts()
+ *
+ * @method bool hasId()
+ * @method bool hasFullName()
+ * @method bool hasEmail()
+ * @method bool hasAvatarUrl()
+ * @method bool hasAccounts()
  */
 class User extends AbstractEntity {
 
