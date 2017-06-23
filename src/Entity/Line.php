@@ -83,12 +83,27 @@ class Line extends AbstractEntity {
     public function toArray() {
         $data = parent::toArray();
 
-        if ($this->removed) {
+        if ($this->hasId() && $this->removed) {
             $data['_destroy'] = true;
         }
 
         return $data;
     }
 
+    /**
+     * @return array
+     */
+    public function getModifiedData() {
+        $data = parent::getModifiedData();
 
+        if ($this->removed) {
+            $data['_destroy'] = true;
+        }
+
+        if (!empty($data)) {
+            $data['id'] = $this->getId();
+        }
+
+        return $data;
+    }
 }

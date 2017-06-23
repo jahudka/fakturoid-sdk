@@ -212,5 +212,22 @@ class Expense extends AbstractBillable {
         parent::__set($name, $value);
     }
 
+    /**
+     * @return array
+     */
+    public function getModifiedData() {
+        $data = parent::getModifiedData();
+
+        if (isset($data['attachment'])) {
+            if ($data['attachment']->isNew()) {
+                $data['attachment'] = $data['attachment']->toDataUrl();
+            } else {
+                unset($data['attachment']);
+            }
+        }
+
+        return $data;
+    }
+
 
 }

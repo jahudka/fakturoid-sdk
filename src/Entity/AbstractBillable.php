@@ -173,19 +173,21 @@ abstract class AbstractBillable extends AbstractEntity {
      * @return $this
      */
     public function setLines($lines) {
-        if (!is_array($lines) && !($lines instanceof \Traversable)) {
-            throw new \InvalidArgumentException("First argument to " . __METHOD__ . " must be either an array or a Traversable object");
+        if ($lines instanceof \Traversable) {
+            $lines = iterator_to_array($lines);
         }
 
-        $this->data['lines'] = new \ArrayObject();
+        if (!is_array($lines)) {
+            throw new \InvalidArgumentException("First argument to " . __METHOD__ . " must be either an array or a Traversable object");
+        }
 
         foreach ($lines as $k => $line) {
             if (!($line instanceof Line)) {
                 throw new \InvalidArgumentException("Invalid item at key '$k', must be an instance of Line");
             }
-
-            $this->data['lines']->append($line);
         }
+
+        $this->getLines()->exchangeArray($lines);
 
         return $this;
     }
@@ -223,6 +225,24 @@ abstract class AbstractBillable extends AbstractEntity {
             $data['lines'] = array_map(function(Line $line) {
                 return $line->toArray();
             }, $data['lines']->getArrayCopy());
+        }
+
+        return $data;
+    }
+
+    public function getModifiedData() {
+        $data = parent::getModifiedData();
+
+        if (isset($data['lines'])) {
+            $data['lines'] = array_map(function(Line $line) {
+                return $line->toArray();
+            }, $data['lines']->getArrayCopy());
+        } else {
+            foreach ($this->getLines() as $line) {
+                if ($modified = $line->getModifiedData()) {
+                    $data['lines'][] = $modified;
+                }
+            }
         }
 
         return $data;

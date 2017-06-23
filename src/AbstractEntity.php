@@ -15,6 +15,9 @@ abstract class AbstractEntity {
     /** @var array */
     protected $data;
 
+    /** @var array */
+    protected $originalData;
+
     /** @var bool */
     protected $readonly = false;
 
@@ -30,7 +33,7 @@ abstract class AbstractEntity {
      * @return $this
      */
     public function setData(array $data) {
-        $this->data = array_intersect_key(Utils::toCamelKeys($data), array_fill_keys($this->getKnownProperties(), 1));
+        $this->data = $this->originalData = array_intersect_key(Utils::toCamelKeys($data), array_fill_keys($this->getKnownProperties(), 1));
         return $this;
     }
 
@@ -57,6 +60,20 @@ abstract class AbstractEntity {
         return Utils::toPascalKeys($this->data);
     }
 
+    /**
+     * @return array
+     */
+    public function getModifiedData() {
+        $modified = [];
+
+        foreach ($this->data as $key => $value) {
+            if (!array_key_exists($key, $this->originalData) || $value !== $this->originalData[$key]) {
+                $modified[$key] = $value;
+            }
+        }
+
+        return Utils::toPascalKeys($modified);
+    }
 
     /**
      * @param string $name
@@ -148,13 +165,6 @@ abstract class AbstractEntity {
      */
     public function __isset($name) {
         return isset($this->data[$name]);
-    }
-
-    /**
-     * @param string $name
-     */
-    public function __unset($name) {
-        unset($this->data[$name]);
     }
 
     /**

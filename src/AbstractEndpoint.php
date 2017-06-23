@@ -132,16 +132,17 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
             throw new \InvalidArgumentException("Invalid entity for endpoint");
         }
 
-        $data = $entity->toArray();
         $url = $this->url;
         $method = 'PATCH';
         $expectedStatus = 200;
 
-        if (!empty($data['id'])) {
-            $url .= '/' . $data['id'];
+        if ($entity->hasId()) {
+            $url .= '/' . $entity->getId();
+            $data = $entity->getModifiedData();
         } else {
             $method = 'POST';
             $expectedStatus = 201;
+            $data = $entity->toArray();
         }
 
         unset($data['id']);
