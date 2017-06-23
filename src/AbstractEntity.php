@@ -151,6 +151,13 @@ abstract class AbstractEntity {
     }
 
     /**
+     * @param string $name
+     */
+    public function __unset($name) {
+        unset($this->data[$name]);
+    }
+
+    /**
      * @param string $property
      * @throws ReadonlyEntityException
      * @throws ReadonlyPropertyException
