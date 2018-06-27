@@ -6,9 +6,9 @@ namespace Jahudka\FakturoidSDK\Tests;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use PHPUnit\Framework;
 
-
-abstract class TestCase extends \PHPUnit_Framework_TestCase {
+abstract class TestCase extends Framework\TestCase {
 
     /**
      * @param array $responses

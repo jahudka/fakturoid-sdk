@@ -2,9 +2,8 @@
 
 namespace Jahudka\FakturoidSDK\Tests;
 
-
-
 use Jahudka\FakturoidSDK\Utils;
+
 
 class UtilsTest extends TestCase {
 
