@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Fakturoid PHP SDK",
     "require": {
+        "php": "^7.1",
         "guzzlehttp/guzzle": "6.3.*"
     },
     "require-dev": {
