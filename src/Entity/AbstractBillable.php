@@ -142,7 +142,7 @@ abstract class AbstractBillable extends AbstractEntity {
      * @return bool
      */
     public function hasTag($tag) {
-        return isset($this->data['tags']) && in_array($tag, $this->data['tags'], true);
+        return isset($this->data['tags']) && in_array(strtolower($tag), array_map('strtolower', $this->data['tags']), true);
     }
 
     /**
