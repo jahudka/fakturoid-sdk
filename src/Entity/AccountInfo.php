@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -40,8 +41,8 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @property-read bool $invoiceGopay
  * @property-read string $htmlUrl
  * @property-read string $url
- * @property-read \DateTime $updatedAt
- * @property-read \DateTime $createdAt
+ * @property-read \DateTimeImmutable $updatedAt
+ * @property-read \DateTimeImmutable $createdAt
  *
  * @method string getSubdomain()
  * @method string getPlan()
@@ -112,14 +113,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasUrl()
  */
 class AccountInfo extends AbstractEntity {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'subdomain',
             'plan',
@@ -159,17 +155,11 @@ class AccountInfo extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt() {
-        return isset($this->data['updatedAt']) ? new \DateTime($this->data['updatedAt']) : null;
+    public function getUpdatedAt(): ?\DateTimeImmutable {
+        return isset($this->data['updatedAt']) ? new \DateTimeImmutable($this->data['updatedAt']) : null;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getCreatedAt() {
-        return isset($this->data['createdAt']) ? new \DateTime($this->data['createdAt']) : null;
+    public function getCreatedAt(): ?\DateTimeImmutable {
+        return isset($this->data['createdAt']) ? new \DateTimeImmutable($this->data['createdAt']) : null;
     }
 }

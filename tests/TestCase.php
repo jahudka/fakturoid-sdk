@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Tests;
 
@@ -9,15 +10,9 @@ use GuzzleHttp\HandlerStack;
 use PHPUnit\Framework;
 
 abstract class TestCase extends Framework\TestCase {
-
-    /**
-     * @param array $responses
-     * @return Client
-     */
-    protected function createHttpClientMock(array $responses) {
+    protected function createHttpClientMock(array $responses): Client {
         $mock = new MockHandler($responses);
         $handler = HandlerStack::create($mock);
         return new Client(['handler' => $handler]);
     }
-
 }

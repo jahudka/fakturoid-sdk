@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -38,14 +39,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method $this setVatRate(int $vatRate)
  */
 class Line extends AbstractEntity {
+    private bool $removed = false;
 
-    /** @var bool */
-    private $removed = false;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
             'name',
@@ -58,10 +54,7 @@ class Line extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return [
             'unitPriceWithoutVat',
             'unitPriceWithVat',
@@ -77,10 +70,7 @@ class Line extends AbstractEntity {
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray() {
+    public function toArray(): array {
         $data = parent::toArray();
 
         if ($this->hasId() && $this->removed) {
@@ -90,10 +80,7 @@ class Line extends AbstractEntity {
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    public function getModifiedData() {
+    public function getModifiedData(): array {
         $data = parent::getModifiedData();
 
         if ($this->removed) {

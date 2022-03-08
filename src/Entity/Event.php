@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -8,7 +9,7 @@ use Jahudka\FakturoidSDK\AbstractEntity;
 
 /**
  * @property-read string $name
- * @property-read \DateTime $createdAt
+ * @property-read \DateTimeImmutable $createdAt
  * @property-read int $invoiceId
  * @property-read int $subjectId
  * @property-read string $text
@@ -33,14 +34,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasUser()
  */
 class Event extends AbstractEntity {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'name',
             'createdAt',
@@ -54,7 +50,6 @@ class Event extends AbstractEntity {
     }
 
     /**
-     * @param array $data
      * @return $this
      */
     public function setData(array $data) {
@@ -65,10 +60,7 @@ class Event extends AbstractEntity {
         return parent::setData($data);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray() {
+    public function toArray(): array {
         $data = parent::toArray();
 
         if (isset($data['user'])) {
@@ -78,11 +70,7 @@ class Event extends AbstractEntity {
         return $data;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getCreatedAt() {
-        return isset($this->data['createdAt']) ? new \DateTime($this->data['createdAt']) : null;
+    public function getCreatedAt(): ?\DateTimeImmutable {
+        return isset($this->data['createdAt']) ? new \DateTimeImmutable($this->data['createdAt']) : null;
     }
-
 }

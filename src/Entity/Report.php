@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
-
 use Jahudka\FakturoidSDK\ReadonlyEntityException;
+
 
 class Report implements \ArrayAccess, \Iterator {
 
     const KEY_NUMERIC = 'numeric',
         KEY_STRING = 'string';
 
-    /** @var array */
-    private $data;
+    private array $data;
 
-    /** @var array */
-    private $months = [
+    private array $months = [
         'January',
         'February',
         'March',
@@ -30,50 +29,30 @@ class Report implements \ArrayAccess, \Iterator {
         'December',
     ];
 
-    /** @var int */
-    private $current = 0;
+    private int $current = 0;
+    private string $keyMode = self::KEY_STRING;
 
-    /** @var string */
-    private $keyMode = self::KEY_STRING;
-
-    /**
-     * @param array $data
-     */
     public function __construct(array $data) {
         $this->data = $data;
     }
 
-    /**
-     * @param string $mode
-     * @return $this
-     */
-    public function setKeyMode($mode) {
+    public function setKeyMode(string $mode) {
         $this->keyMode = $mode;
         return $this;
     }
 
-    /**
-     * @param string $mode
-     * @return Report
-     */
-    public function withKeyMode($mode) {
+    public function withKeyMode(string $mode) {
         $report = clone $this;
         return $report->setKeyMode($mode);
     }
 
-    /**
-     * @return float
-     */
-    public function getTotalIncome() {
+    public function getTotalIncome(): float {
         return array_reduce($this->data, function($sum, $item) {
             return $sum + $item['income'];
         }, 0);
     }
 
-    /**
-     * @return float
-     */
-    public function getTotalVat() {
+    public function getTotalVat(): float {
         return array_reduce($this->data, function($sum, $item) {
             return $sum + $item['vat'];
         }, 0);
@@ -83,17 +62,15 @@ class Report implements \ArrayAccess, \Iterator {
 
     /**
      * @param string|int $offset
-     * @return bool
      */
-    public function offsetExists($offset) {
+    public function offsetExists($offset): bool {
         return is_int($offset) ? $offset >= 1 && $offset <= 12 : array_key_exists($offset, $this->months);
     }
 
     /**
      * @param string|int $offset
-     * @return array
      */
-    public function offsetGet($offset) {
+    public function offsetGet($offset): array {
         if (is_int($offset)) {
             if ($offset < 1 || $offset > 12) {
                 throw new \RangeException("Invalid month");
@@ -105,60 +82,34 @@ class Report implements \ArrayAccess, \Iterator {
         return $this->data[$offset];
     }
 
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     * @throws ReadonlyEntityException
-     */
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value): void {
         throw new ReadonlyEntityException();
     }
 
-    /**
-     * @param mixed $offset
-     * @throws ReadonlyEntityException
-     */
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset): void {
         throw new ReadonlyEntityException();
     }
 
 
     /******* Iterator implementation *******/
 
-    /**
-     * @return mixed
-     */
-    public function current() {
+    public function current(): array {
         return $this->data[$this->months[$this->current]];
     }
 
-    /**
-     * @return void
-     */
-    public function next() {
+    public function next(): void {
         $this->current++;
     }
 
-    /**
-     * @return string|int
-     */
     public function key() {
         return $this->keyMode === self::KEY_NUMERIC ? $this->current + 1 : $this->months[$this->current];
     }
 
-    /**
-     * @return bool
-     */
-    public function valid() {
+    public function valid(): bool {
         return $this->current >= 0 && $this->current < 12;
     }
 
-    /**
-     * @return void
-     */
-    public function rewind() {
+    public function rewind(): void {
         $this->current = 0;
     }
-
-
 }

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -10,30 +11,19 @@ use Jahudka\FakturoidSDK\MemberAccessException;
 
 
 /**
+ * @extends AbstractEndpoint<Generator>
  * @property-read Generators $templates
  * @property-read Generators $recurring
- *
- * @method Generator get(int $id)
- * @method Generator[] getIterator(int $offset = null, int $limit = null)
- * @method Generator create(array $data)
- * @method Generator save(Generator $generator)
- * @method $this delete(Generator|int $generator)
  */
 class Generators extends AbstractEndpoint {
     use DateFilterableTrait,
         SubjectFilterableTrait;
 
-    /**
-     * @param Client $api
-     */
     public function __construct(Client $api) {
         parent::__construct($api, 'accounts/' . $api->getSlug() . '/generators', Generator::class);
     }
 
-    /**
-     * @return array
-     */
-    protected function getKnownOptions() {
+    protected function getKnownOptions(): array {
         return [
             'since',
             'updated_since',
@@ -41,12 +31,7 @@ class Generators extends AbstractEndpoint {
         ];
     }
 
-    /**
-     * @param string $name
-     * @return Generators
-     * @throws MemberAccessException
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         if ($this->original && in_array($name, ['templates', 'recurring'], true)) {
             $endpoint = clone $this;
             $endpoint->url .= '/' . rtrim($name, 's');

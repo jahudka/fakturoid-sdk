@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -7,13 +8,10 @@ use Jahudka\FakturoidSDK\Entity\Subject;
 
 
 trait SubjectFilterableTrait {
-
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
      */
-    public abstract function setOption($option, $value);
+    public abstract function setOption(string $option, $value);
 
     /**
      * @param Subject|int $subject

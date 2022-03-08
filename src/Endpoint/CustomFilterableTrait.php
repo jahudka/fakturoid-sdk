@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
 
 trait CustomFilterableTrait {
-
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
      */
-    public abstract function setOption($option, $value);
+    public abstract function setOption(string $option, $value);
 
     /**
-     * @param string $customId
      * @return $this
      */
-    public function withCustomId($customId) {
+    public function withCustomId(string $customId) {
         return $this->setOption('custom_id', $customId);
     }
-
 }

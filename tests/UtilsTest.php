@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Jahudka\FakturoidSDK\Tests;
 
 use Jahudka\FakturoidSDK\Utils;
@@ -7,7 +9,7 @@ use Jahudka\FakturoidSDK\Utils;
 
 class UtilsTest extends TestCase {
 
-    public function testToCamelCase() {
+    public function testToCamelCase(): void {
         $this->assertEquals('pascalCaseString', Utils::toCamelCase('pascal_case_string'));
         $this->assertEquals('camelCaseString', Utils::toCamelCase('camelCaseString'));
         $this->assertEquals('StringStartingWithUnderscore', Utils::toCamelCase('_string_starting_with_underscore'));
@@ -17,7 +19,7 @@ class UtilsTest extends TestCase {
     /**
      * @depends testToCamelCase
      */
-    public function testToCamelKeys() {
+    public function testToCamelKeys(): void {
         $src = [
             'pascal_key_1' => 1,
             'pascal_key_2' => 2,
@@ -33,7 +35,7 @@ class UtilsTest extends TestCase {
         $this->assertEquals($expected, Utils::toCamelKeys($src));
     }
 
-    public function testToPascalCase() {
+    public function testToPascalCase(): void {
         $this->assertEquals('camel_case_string', Utils::toPascalCase('camelCaseString'));
         $this->assertEquals('pascal_case_string', Utils::toPascalCase('pascal_case_string'));
         $this->assertEquals('_string_starting_with_capital_letter', Utils::toPascalCase('StringStartingWithCapitalLetter'));
@@ -44,7 +46,7 @@ class UtilsTest extends TestCase {
     /**
      * @depends testToPascalCase
      */
-    public function testToPascalKeys() {
+    public function testToPascalKeys(): void {
         $src = [
             'camelKey1' => 1,
             'camelKey2' => 2,
@@ -60,7 +62,7 @@ class UtilsTest extends TestCase {
         $this->assertEquals($expected, Utils::toPascalKeys($src));
     }
 
-    public function testFormatDateTime() {
+    public function testFormatDateTime(): void {
         date_default_timezone_set('UTC');
 
         $this->assertEquals(null, Utils::formatDateTime(null));
@@ -72,11 +74,10 @@ class UtilsTest extends TestCase {
     /**
      * @depends testFormatDateTime
      */
-    public function testFormatDate() {
+    public function testFormatDate(): void {
         $this->assertEquals(null, Utils::formatDate(null));
         $this->assertEquals('2016-12-07', Utils::formatDate(1481112000));
         $this->assertEquals('2016-12-07', Utils::formatDate('2016-12-07T13:00:00+01:00'));
         $this->assertEquals('2016-12-07', Utils::formatDate(new \DateTime('2016-12-07 13:00:00', new \DateTimeZone('Europe/Prague'))));
     }
-
 }

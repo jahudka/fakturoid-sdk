@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Tests;
 
@@ -8,11 +9,7 @@ use Jahudka\FakturoidSDK\Endpoint;
 
 
 class ClientTest extends TestCase {
-
-    /**
-     * @return Client
-     */
-    public function testEndpointGetters() {
+    public function testEndpointGetters(): Client {
         $httpClient = $this->createHttpClientMock([]);
 
         $client = new Client($httpClient, 'tester@sdk.fakturoid.cz', '1234567890', 'test-app');
@@ -33,22 +30,17 @@ class ClientTest extends TestCase {
 
     /**
      * @depends testEndpointGetters
-     * @expectedException \Jahudka\FakturoidSDK\MemberAccessException
-     *
-     * @param Client $client
      */
-    public function testNonexistentEndpointGetter(Client $client) {
+    public function testNonexistentEndpointGetter(Client $client): void {
+        $this->expectException(\Jahudka\FakturoidSDK\MemberAccessException::class);
         $client->nonexistentEndpoint;
     }
 
     /**
      * @depends testEndpointGetters
-     * @expectedException \Jahudka\FakturoidSDK\MemberAccessException
-     *
-     * @param Client $client
      */
-    public function testAbstractEndpointGetter(Client $client) {
+    public function testAbstractEndpointGetter(Client $client): void {
+        $this->expectException(\Jahudka\FakturoidSDK\MemberAccessException::class);
         $client->abstractBillable;
     }
-
 }

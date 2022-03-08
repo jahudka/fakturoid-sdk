@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -26,14 +27,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasAccounts()
  */
 class User extends AbstractEntity {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
             'fullName',
@@ -44,7 +40,6 @@ class User extends AbstractEntity {
     }
 
     /**
-     * @param array $data
      * @return $this
      */
     public function setData(array $data) {
@@ -57,10 +52,7 @@ class User extends AbstractEntity {
         return parent::setData($data);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray() {
+    public function toArray(): array {
         $data = parent::toArray();
 
         $data['accounts'] = array_map(function(Account $account) {
@@ -69,6 +61,4 @@ class User extends AbstractEntity {
 
         return $data;
     }
-
-
 }

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK;
 
@@ -11,25 +12,15 @@ namespace Jahudka\FakturoidSDK;
  * @method bool hasId()
  */
 abstract class AbstractEntity {
+    protected array $data;
+    protected array $originalData;
+    protected bool $readonly = false;
 
-    /** @var array */
-    protected $data;
-
-    /** @var array */
-    protected $originalData;
-
-    /** @var bool */
-    protected $readonly = false;
-
-    /**
-     * @param array $data
-     */
     public function __construct(array $data = []) {
         $this->setData($data);
     }
 
     /**
-     * @param array $data
      * @return $this
      */
     public function setData(array $data) {
@@ -37,33 +28,21 @@ abstract class AbstractEntity {
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return [];
     }
 
-    /**
-     * @return array
-     */
-    public function toArray() {
+    public function toArray(): array {
         return Utils::toPascalKeys($this->data);
     }
 
-    /**
-     * @return array
-     */
-    public function getModifiedData() {
+    public function getModifiedData(): array {
         $modified = [];
 
         foreach ($this->data as $key => $value) {
@@ -75,12 +54,7 @@ abstract class AbstractEntity {
         return Utils::toPascalKeys($modified);
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     * @throws MemberAccessException
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         $method = 'get' . ucfirst($name);
 
         if (method_exists($this, $method)) {
@@ -95,13 +69,7 @@ abstract class AbstractEntity {
         return array_key_exists($name, $this->data) ? $this->data[$name] : null;
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     * @throws MemberAccessException
-     * @throws ReadonlyEntityException
-     */
-    public function __set($name, $value) {
+    public function __set(string $name, $value): void {
         $method = 'set' . ucfirst($name);
 
         if (method_exists($this, $method)) {
@@ -110,27 +78,16 @@ abstract class AbstractEntity {
             }
 
             call_user_func([$this, $method], $value);
-
         } else if (in_array($name, $this->getKnownProperties(), true)) {
             $this->assertWritable($name);
             $this->data[$name] = $value;
-
         } else {
             $class = get_class($this);
             throw new MemberAccessException("Trying to access non-existent property '$name' of class $class");
-
         }
     }
 
-    /**
-     * @param string $name
-     * @param array $args
-     * @return mixed|bool|$this
-     * @throws \InvalidArgumentException
-     * @throws MemberAccessException
-     * @throws ReadonlyEntityException
-     */
-    public function __call($name, $args) {
+    public function __call(string $name, array $args) {
         if (preg_match('/^(get|set|is|has)([A-Z].*)$/', $name, $m)) {
             switch ($m[1]) {
                 case 'get':
@@ -156,23 +113,13 @@ abstract class AbstractEntity {
         $class = get_class($this);
         $types = implode(', ', array_map('gettype', $args));
         throw new MemberAccessException("Call to undefined method $class::$name($types)");
-
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function __isset($name) {
+    public function __isset(string $name): bool {
         return isset($this->data[$name]);
     }
 
-    /**
-     * @param string $property
-     * @throws ReadonlyEntityException
-     * @throws ReadonlyPropertyException
-     */
-    protected function assertWritable($property) {
+    protected function assertWritable(string $property): void {
         if ($this->readonly) {
             throw new ReadonlyEntityException();
         } else if (in_array($property, $this->getReadonlyProperties())) {

@@ -1,52 +1,38 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK;
 
 
-
+/**
+ * @template T of AbstractEntity
+ * @implements \Iterator<T>
+ */
 class EndpointIterator implements \Iterator {
-
-    /** @var Client */
-    private $api;
-
-    /** @var string */
-    private $url;
-
-    /** @var array */
-    private $options;
-
-    /** @var string */
-    private $entityClass;
-
-    /** @var int */
-    private $offset;
-
-    /** @var int */
-    private $limit;
-
-    /** @var int */
-    private $pages = null;
-
-    /** @var int */
-    private $page = 1;
-
-    /** @var int */
-    private $item = 0;
-
-    /** @var array */
-    private $buffer = null;
-
+    private Client $api;
+    private string $url;
+    private array $options;
+    /** @var class-string<T> */
+    private string $entityClass;
+    private ?int $offset;
+    private ?int $limit;
+    private ?int $pages = null;
+    private int $page = 1;
+    private int $item = 0;
+    private ?array $buffer = null;
 
     /**
-     * @param Client $api
-     * @param string $url
-     * @param array $options
-     * @param string $entityClass
-     * @param int $offset
-     * @param int $limit
+     * @param class-string<T> $entityClass
      */
-    public function __construct(Client $api, $url, array $options, $entityClass, $offset, $limit) {
+    public function __construct(
+        Client $api,
+        string $url,
+        array $options,
+        string $entityClass,
+        ?int $offset = null,
+        ?int $limit = null
+    ) {
         $this->api = $api;
         $this->url = $url;
         $this->options = $options;
@@ -57,53 +43,39 @@ class EndpointIterator implements \Iterator {
     }
 
     /**
-     * @return AbstractEntity
+     * @return T
      */
-    public function current() {
+    public function current(): AbstractEntity {
         return new $this->entityClass($this->buffer[$this->item]);
     }
 
-
-    /**
-     * @return void
-     */
-    public function next() {
-        $this->item++;
+    public function next(): void {
+        ++$this->item;
 
         if ($this->limit) {
-            $this->limit--;
+            ++$this->limit;
         }
 
         if ($this->item >= Client::ITEMS_PER_PAGE) {
             $this->item = 0;
-            $this->page++;
+            ++$this->page;
             $this->loadPage();
         }
     }
 
-    /**
-     * @return int
-     */
-    public function key() {
+    public function key(): int {
         return ($this->page - 1) * Client::ITEMS_PER_PAGE + $this->item;
     }
 
-    /**
-     * @return bool
-     */
-    public function valid() {
+    public function valid(): bool {
         if ($this->limit !== null && $this->limit <= 0) {
             return false;
         }
 
         return $this->pages !== null && $this->page < $this->pages || ($this->pages === null || $this->page === $this->pages) && $this->item < count($this->buffer);
-
     }
 
-    /**
-     * @return void
-     */
-    public function rewind() {
+    public function rewind(): void {
         $this->pages = null;
 
         if ($this->offset !== null) {
@@ -117,10 +89,7 @@ class EndpointIterator implements \Iterator {
         $this->loadPage();
     }
 
-    /**
-     * @return void
-     */
-    private function loadPage() {
+    private function loadPage(): void {
         $response = $this->api->sendRequest($this->buildUrl());
 
         if (($paging = $response->getHeaderLine('Link')) && preg_match('/<([^>]+)>; rel="last"/', $paging, $m)) {
@@ -134,10 +103,7 @@ class EndpointIterator implements \Iterator {
         $this->buffer = json_decode($response->getBody()->getContents(), true);
     }
 
-    /**
-     * @return string
-     */
-    private function buildUrl() {
+    private function buildUrl(): string {
         $params = [
             'page' => $this->page,
         ];

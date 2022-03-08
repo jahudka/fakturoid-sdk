@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -25,8 +26,8 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @property-read string $url
  * @property-read string $htmlUrl
  * @property-read string $subjectUrl
- * @property-read \DateTime $updatedAt
- * @property \ArrayObject|Line[] $lines
+ * @property-read \DateTimeImmutable $updatedAt
+ * @property \ArrayObject<Line> $lines
  *
  * @method int getSubjectId()
  * @method array getTags()
@@ -80,10 +81,7 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  */
 abstract class AbstractBillable extends AbstractEntity {
 
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
             'subjectId',
@@ -109,10 +107,7 @@ abstract class AbstractBillable extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return [
             'subtotal',
             'nativeSubtotal',
@@ -126,10 +121,9 @@ abstract class AbstractBillable extends AbstractEntity {
     }
 
     /**
-     * @param string $tag
      * @return $this
      */
-    public function addTag($tag) {
+    public function addTag(string $tag) {
         if (!isset($this->data['tags']) || !in_array($tag, $this->data['tags'], true)) {
             $this->data['tags'][] = $tag;
         }
@@ -138,18 +132,16 @@ abstract class AbstractBillable extends AbstractEntity {
     }
 
     /**
-     * @param string $tag
      * @return bool
      */
-    public function hasTag($tag) {
+    public function hasTag(string $tag) {
         return isset($this->data['tags']) && in_array(strtolower($tag), array_map('strtolower', $this->data['tags']), true);
     }
 
     /**
-     * @param string $tag
      * @return $this
      */
-    public function removeTag($tag) {
+    public function removeTag(string $tag) {
         if (isset($this->data['tags']) && ($i = array_search($tag, $this->data['tags'], true)) !== false) {
             array_splice($this->data['tags'], $i, 1);
         }
@@ -158,9 +150,9 @@ abstract class AbstractBillable extends AbstractEntity {
     }
 
     /**
-     * @return \ArrayObject|Line[]
+     * @return \ArrayObject<Line>
      */
-    public function getLines() {
+    public function getLines(): \ArrayObject {
         if (!isset($this->data['lines'])) {
             $this->data['lines'] = new \ArrayObject();
         }
@@ -172,15 +164,7 @@ abstract class AbstractBillable extends AbstractEntity {
      * @param \Traversable|array $lines
      * @return $this
      */
-    public function setLines($lines) {
-        if ($lines instanceof \Traversable) {
-            $lines = iterator_to_array($lines);
-        }
-
-        if (!is_array($lines)) {
-            throw new \InvalidArgumentException("First argument to " . __METHOD__ . " must be either an array or a Traversable object");
-        }
-
+    public function setLines(iterable $lines) {
         foreach ($lines as $k => $line) {
             if (!($line instanceof Line)) {
                 throw new \InvalidArgumentException("Invalid item at key '$k', must be an instance of Line");
@@ -188,19 +172,14 @@ abstract class AbstractBillable extends AbstractEntity {
         }
 
         $this->getLines()->exchangeArray($lines);
-
         return $this;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt() {
-        return isset($this->data['updatedAt']) ? new \DateTime($this->data['updatedAt']) : null;
+    public function getUpdatedAt(): ?\DateTimeImmutable {
+        return isset($this->data['updatedAt']) ? new \DateTimeImmutable($this->data['updatedAt']) : null;
     }
 
     /**
-     * @param array $data
      * @return $this
      */
     public function setData(array $data) {
@@ -215,10 +194,7 @@ abstract class AbstractBillable extends AbstractEntity {
         return parent::setData($data);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray() {
+    public function toArray(): array {
         $data = parent::toArray();
 
         if (isset($data['lines'])) {
@@ -230,7 +206,7 @@ abstract class AbstractBillable extends AbstractEntity {
         return $data;
     }
 
-    public function getModifiedData() {
+    public function getModifiedData(): array {
         $data = parent::getModifiedData();
 
         if (isset($data['lines'])) {

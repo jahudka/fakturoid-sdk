@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -9,26 +10,16 @@ use Jahudka\FakturoidSDK\Entity\BankAccount;
 
 
 /**
- * @method BankAccount get(int $id)
- * @method BankAccount[] getIterator(int $offset = null, int $limit = null)
+ * @extends AbstractEndpoint<BankAccount>
  */
 class BankAccounts extends AbstractEndpoint {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @param Client $api
-     */
     public function __construct(Client $api) {
         parent::__construct($api, 'accounts/' . $api->getSlug() . '/bank_accounts', BankAccount::class);
     }
 
-    /**
-     * @return array
-     */
-    protected function getKnownOptions() {
+    protected function getKnownOptions(): array {
         return [];
     }
-
 }

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -12,10 +13,10 @@ use Jahudka\FakturoidSDK\Utils;
  * @property bool $proforma
  * @property bool $paypal
  * @property bool $gopay
- * @property \DateTime $startDate
- * @property \DateTime $endDate
+ * @property \DateTimeImmutable $startDate
+ * @property \DateTimeImmutable $endDate
  * @property int $monthsPeriod
- * @property \DateTime $nextOccurrenceOn
+ * @property \DateTimeImmutable $nextOccurrenceOn
  * @property bool $lastDayInMonth
  * @property bool $taxDateAtEndOfLastMonth
  * @property int $due
@@ -30,10 +31,10 @@ use Jahudka\FakturoidSDK\Utils;
  * @method bool isProforma()
  * @method bool isPaypal()
  * @method bool isGopay()
- * @method \DateTime getStartDate()
- * @method \DateTime getEndDate()
+ * @method \DateTimeImmutable getStartDate()
+ * @method \DateTimeImmutable getEndDate()
  * @method int getMonthsPeriod()
- * @method \DateTime getNextOccurrenceOn()
+ * @method \DateTimeImmutable getNextOccurrenceOn()
  * @method bool isLastDayInMonth()
  * @method bool isTaxDateAtEndOfLastMonth()
  * @method int getDue()
@@ -66,10 +67,10 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setProforma(bool $proforma)
  * @method $this setPaypal(bool $paypal)
  * @method $this setGopay(bool $gopay)
- * @method $this setStartDate(\DateTime $startDate)
- * @method $this setEndDate(\DateTime $endDate)
+ * @method $this setStartDate(\DateTimeImmutable|string|int $startDate)
+ * @method $this setEndDate(\DateTimeImmutable|string|int $endDate)
  * @method $this setMonthsPeriod(int $monthsPeriod)
- * @method $this setNextOccurrenceOn(\DateTime $nextOccurrenceOn)
+ * @method $this setNextOccurrenceOn(\DateTimeImmutable|string|int $nextOccurrenceOn)
  * @method $this setLastDayInMonth(bool $lastDayInMonth)
  * @method $this setTaxDateAtEndOfLastMonth(bool $taxDateAtEndOfLastMonth)
  * @method $this setDue(int $due)
@@ -80,8 +81,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setNote(string $note)
  */
 class Generator extends AbstractBillable {
-
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return array_merge(parent::getKnownProperties(), [
             'name',
             'recurring',
@@ -103,23 +103,15 @@ class Generator extends AbstractBillable {
         ]);
     }
 
-    /**
-     * @param string $name
-     * @return \DateTime|mixed|null
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         if (in_array($name, ['startDate', 'endDate', 'nextOccurrenceOn'], true)) {
-            return isset($this->data[$name]) ? new \DateTime($this->data[$name]) : null;
+            return isset($this->data[$name]) ? new \DateTimeImmutable($this->data[$name]) : null;
         }
 
         return parent::__get($name);
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set($name, $value) {
+    public function __set(string $name, $value): void {
         if (in_array($name, ['startDate', 'endDate', 'nextOccurrenceOn'], true)) {
             $this->data[$name] = Utils::formatDate($value);
             return;

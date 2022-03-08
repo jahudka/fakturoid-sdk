@@ -1,45 +1,31 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
 use Jahudka\FakturoidSDK\AbstractEndpoint;
 use Jahudka\FakturoidSDK\Client;
 use Jahudka\FakturoidSDK\Entity\User;
-use function GuzzleHttp\json_decode;
 
 
 /**
- * @method User get(int $id)
- * @method User[] getIterator(int $offset = null, int $limit = null)
+ * @extends AbstractEndpoint<User>
  */
 class Users extends AbstractEndpoint {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @param Client $api
-     */
     public function __construct(Client $api) {
         parent::__construct($api, 'accounts/' . $api->getSlug() . '/users', User::class);
     }
 
-
-    /**
-     * @return array
-     */
-    protected function getKnownOptions() {
+    protected function getKnownOptions(): array {
         return [];
     }
 
-    /**
-     * @return User
-     */
-    public function getCurrent() {
+    public function getCurrent(): User {
         $response = $this->api->sendRequest('user.json');
         $payload = json_decode($response->getBody()->getContents(), true);
         return new $this->entityClass($payload);
     }
-
 }

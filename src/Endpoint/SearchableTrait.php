@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
 
 trait SearchableTrait {
-
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
      */
-    public abstract function setOption($option, $value);
+    public abstract function setOption(string $option, $value);
 
     /**
-     * @param string $query
      * @return $this
      */
-    public function matching($query) {
+    public function matching(string $query) {
         return $this->setOption('query', $query);
     }
-
 }

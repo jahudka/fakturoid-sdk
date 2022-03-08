@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -10,14 +11,9 @@ use Jahudka\FakturoidSDK\Utils;
 
 
 /**
+ * @extends AbstractBillable<Invoice>
  * @property-read Invoices $regular
  * @property-read Invoices $proforma
- *
- * @method Invoice get(int $id)
- * @method Invoice[] getIterator(int $offset = null, int $limit = null)
- * @method Invoice create(array $data)
- * @method Invoice save(Invoice $invoice)
- * @method $this delete(Invoice|int $invoice)
  *
  * @method $this markAsSent(Invoice|int $invoice)
  * @method $this deliver(Invoice|int $invoice)
@@ -32,17 +28,11 @@ use Jahudka\FakturoidSDK\Utils;
 class Invoices extends AbstractBillable {
     use CustomFilterableTrait;
 
-    /**
-     * @param Client $api
-     */
     public function __construct(Client $api) {
         parent::__construct($api, 'accounts/' . $api->getSlug() . '/invoices', Invoice::class);
     }
 
-    /**
-     * @return array
-     */
-    protected function getKnownOptions() {
+    protected function getKnownOptions(): array {
         return [
             'since',
             'updated_since',
@@ -74,7 +64,6 @@ class Invoices extends AbstractBillable {
 
     /**
      * @param Invoice|int $invoice
-     * @param array $params
      * @return $this
      */
     public function sendMessage($invoice, array $params = []) {
@@ -90,13 +79,7 @@ class Invoices extends AbstractBillable {
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @param array $args
-     * @return $this
-     * @throws MemberAccessException
-     */
-    public function __call($name, array $args) {
+    public function __call(string $name, array $args) {
         if (in_array($name, ['markAsSent', 'deliver', 'payProforma', 'payPartialProforma', 'deliverReminder', 'cancel', 'undoCancel'], true)) {
             if (empty($args)) {
                 throw new \InvalidArgumentException("First argument of " . __CLASS__ . "::$name() must be an integer or an instance of Invoice, none given");
@@ -110,12 +93,7 @@ class Invoices extends AbstractBillable {
         throw new MemberAccessException("Call to undefined method $class::$name($types)");
     }
 
-    /**
-     * @param string $name
-     * @return Invoices
-     * @throws MemberAccessException
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         if ($this->original && in_array($name, ['regular', 'proforma'], true)) {
             $endpoint = clone $this;
             $endpoint->url .= '/' . $name;

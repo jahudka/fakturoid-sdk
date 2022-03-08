@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -9,8 +10,8 @@ use Jahudka\FakturoidSDK\AbstractEntity;
 /**
  * @property-read int $id
  * @property-read string $name
- * @property-read \DateTime $createdAt
- * @property-read \DateTime $completedAt
+ * @property-read \DateTimeImmutable $createdAt
+ * @property-read \DateTimeImmutable $completedAt
  * @property-read int $invoiceId
  * @property-read int $subjectId
  * @property-read string $text
@@ -34,14 +35,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasSubjectUrl()
  */
 class Todo extends AbstractEntity {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
             'name',
@@ -55,18 +51,11 @@ class Todo extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getCreatedAt() {
-        return isset($this->data['createdAt']) ? new \DateTime($this->data['createdAt']) : null;
+    public function getCreatedAt(): ?\DateTimeImmutable {
+        return isset($this->data['createdAt']) ? new \DateTimeImmutable($this->data['createdAt']) : null;
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getCompletedAt() {
-        return isset($this->data['completedAt']) ? new \DateTime($this->data['completedAt']) : null;
+    public function getCompletedAt(): ?\DateTimeImmutable {
+        return isset($this->data['completedAt']) ? new \DateTimeImmutable($this->data['completedAt']) : null;
     }
-
 }

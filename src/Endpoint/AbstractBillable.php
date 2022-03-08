@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -8,18 +9,20 @@ use Jahudka\FakturoidSDK\AbstractEntity;
 use Jahudka\FakturoidSDK\Utils;
 
 
+/**
+ * @template T of AbstractEntity
+ * @extends AbstractEndpoint<T>
+ */
 abstract class AbstractBillable extends AbstractEndpoint  {
     use SearchableTrait,
         DateFilterableTrait,
         SubjectFilterableTrait;
 
     /**
-     * @param AbstractEntity|int $entity
-     * @param string $event
-     * @param array $data
+     * @param T|int $entity
      * @return $this
      */
-    protected function fireEvent($entity, $event, array $data = null) {
+    protected function fireEvent($entity, string $event, array $data = null) {
         if ($entity instanceof AbstractEntity) {
             $entity = $entity->getId();
         }
@@ -30,7 +33,7 @@ abstract class AbstractBillable extends AbstractEndpoint  {
     }
 
     /**
-     * @param AbstractEntity|int $expense
+     * @param T|int $expense
      * @param \DateTime|string|int $paidAt
      * @return $this
      */
@@ -40,7 +43,7 @@ abstract class AbstractBillable extends AbstractEndpoint  {
     }
 
     /**
-     * @param AbstractEntity|int $expense
+     * @param T|int $expense
      * @return $this
      */
     public function removePayment($expense) {
@@ -48,18 +51,16 @@ abstract class AbstractBillable extends AbstractEndpoint  {
     }
 
     /**
-     * @param string $number
      * @return $this
      */
-    public function withNumber($number) {
+    public function withNumber(string $number) {
         return $this->setOption('number', $number);
     }
 
     /**
-     * @param string $status
      * @return $this
      */
-    public function withStatus($status) {
+    public function withStatus(string $status) {
         return $this->setOption('status', $status);
     }
 }

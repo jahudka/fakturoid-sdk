@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -23,14 +24,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasPermission()
  */
 class Account extends AbstractEntity {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'slug',
             'logo',
@@ -39,11 +35,7 @@ class Account extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return bool
-     */
-    public function isWritable() {
+    public function isWritable(): bool {
         return in_array($this->getPermission(), ['owner', 'write'], true);
     }
-
 }

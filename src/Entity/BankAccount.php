@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -31,14 +32,9 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasPaymentAdjustment()
  */
 class BankAccount extends AbstractEntity {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
             'name',
@@ -50,5 +46,4 @@ class BankAccount extends AbstractEntity {
             'paymentAdjustment',
         ];
     }
-
 }

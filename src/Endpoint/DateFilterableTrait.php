@@ -1,19 +1,17 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
-
 use Jahudka\FakturoidSDK\Utils;
 
-trait DateFilterableTrait {
 
+trait DateFilterableTrait {
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
      */
-    public abstract function setOption($option, $value);
+    public abstract function setOption(string $option, $value);
 
     /**
      * @param \DateTime|string|int $date
@@ -30,5 +28,4 @@ trait DateFilterableTrait {
     public function updatedSince($date) {
         return $this->setOption('updated_since', Utils::formatDateTime($date));
     }
-
 }

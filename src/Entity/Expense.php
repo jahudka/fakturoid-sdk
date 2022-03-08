@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -20,16 +21,16 @@ use Jahudka\FakturoidSDK\Utils;
  * @property-read string $supplierVatNo
  * @property-read string $status
  * @property string $documentType
- * @property \DateTime $issuedOn
- * @property \DateTime $taxableFulfillmentDue
- * @property \DateTime $dueOn
- * @property-read \DateTime $paidOn
+ * @property \DateTimeImmutable $issuedOn
+ * @property \DateTimeImmutable $taxableFulfillmentDue
+ * @property \DateTimeImmutable $dueOn
+ * @property-read \DateTimeImmutable $paidOn
  * @property string $description
  * @property string $privateNote
  * @property int $supplyCode
  * @property bool $roundTotal
  * @property Attachment $attachment
- * @property-read \DateTime $createdAt
+ * @property-read \DateTimeImmutable $createdAt
  *
  * @method string getNumber()
  * @method string getOriginalNumber()
@@ -44,16 +45,16 @@ use Jahudka\FakturoidSDK\Utils;
  * @method string getSupplierVatNo()
  * @method string getStatus()
  * @method string getDocumentType()
- * @method \DateTime getIssuedOn()
- * @method \DateTime getTaxableFulfillmentDue()
- * @method \DateTime getDueOn()
- * @method \DateTime getPaidOn()
+ * @method \DateTimeImmutable getIssuedOn()
+ * @method \DateTimeImmutable getTaxableFulfillmentDue()
+ * @method \DateTimeImmutable getDueOn()
+ * @method \DateTimeImmutable getPaidOn()
  * @method string getDescription()
  * @method string getPrivateNote()
  * @method int getSupplyCode()
  * @method bool isRoundTotal()
  * @method Attachment getAttachment()
- * @method \DateTime getCreatedAt()
+ * @method \DateTimeImmutable getCreatedAt()
  *
  * @method bool hasNumber()
  * @method bool hasOriginalNumber()
@@ -83,20 +84,16 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setOriginalNumber(string $originalNumber)
  * @method $this setVariableSymbol(string $variableSymbol)
  * @method $this setDocumentType(string $documentType)
- * @method $this setIssuedOn(\DateTime $issuedOn)
- * @method $this setTaxableFulfillmentDue(\DateTime $taxableFulfillmentDue)
- * @method $this setDueOn(\DateTime $dueOn)
+ * @method $this setIssuedOn(\DateTimeImmutable $issuedOn)
+ * @method $this setTaxableFulfillmentDue(\DateTimeImmutable $taxableFulfillmentDue)
+ * @method $this setDueOn(\DateTimeImmutable $dueOn)
  * @method $this setDescription(string $description)
  * @method $this setPrivateNote(string $privateNote)
  * @method $this setSupplyCode(int $supplyCode)
  * @method $this setRoundTotal(bool $roundTotal)
  */
 class Expense extends AbstractBillable {
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return array_merge(parent::getKnownProperties(), [
             'number',
             'originalNumber',
@@ -124,10 +121,7 @@ class Expense extends AbstractBillable {
         ]);
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return array_merge(parent::getReadonlyProperties(), [
             'supplierName',
             'supplierStreet',
@@ -144,7 +138,6 @@ class Expense extends AbstractBillable {
     }
 
     /**
-     * @param array $data
      * @return $this
      */
     public function setData(array $data) {
@@ -155,10 +148,7 @@ class Expense extends AbstractBillable {
         return parent::setData($data);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray() {
+    public function toArray(): array {
         $data = parent::toArray();
 
         if (isset($data['attachment'])) {
@@ -187,23 +177,15 @@ class Expense extends AbstractBillable {
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @return \DateTime|mixed|null
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn', 'paidOn', 'createdAt'], true)) {
-            return isset($this->data[$name]) ? new \DateTime($this->data[$name]) : null;
+            return isset($this->data[$name]) ? new \DateTimeImmutable($this->data[$name]) : null;
         }
 
         return parent::__get($name);
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set($name, $value) {
+    public function __set(string $name, $value): void {
         if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn'], true)) {
             $this->data[$name] = Utils::formatDate($value);
             return;
@@ -212,10 +194,7 @@ class Expense extends AbstractBillable {
         parent::__set($name, $value);
     }
 
-    /**
-     * @return array
-     */
-    public function getModifiedData() {
+    public function getModifiedData(): array {
         $data = parent::getModifiedData();
 
         if (isset($data['attachment'])) {
@@ -228,6 +207,4 @@ class Expense extends AbstractBillable {
 
         return $data;
     }
-
-
 }

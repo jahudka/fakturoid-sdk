@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -20,40 +21,27 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @method bool hasDownloadUrl()
  */
 class Attachment extends AbstractEntity {
-
-    /** @var string */
-    private $path = null;
-
-    /** @var string */
-    private $mimeType = null;
+    private ?string $path = null;
+    private ?string $mimeType = null;
 
     /**
-     * @param array|string $data
+     * @param array|string $dataOrPath
      */
-    public function __construct($data) {
-        if (is_string($data)) {
-            $this->path = $data;
-            $data = [];
-
-            if (func_num_args() === 2) {
-                $this->mimeType = func_get_arg(1);
-            }
+    public function __construct($dataOrPath, ?string $mimeType = null) {
+        if (is_string($dataOrPath)) {
+            $this->path = $dataOrPath;
+            $this->mimeType = $mimeType;
+            $dataOrPath = [];
         }
 
-        parent::__construct($data);
+        parent::__construct($dataOrPath);
     }
 
-    /**
-     * @return bool
-     */
-    public function isNew() {
+    public function isNew(): bool {
         return !empty($this->path);
     }
 
-    /**
-     * @return string
-     */
-    public function toDataUrl() {
+    public function toDataUrl(): string {
         if (!is_file($this->path) || !is_readable($this->path)) {
             throw new \RuntimeException("Cannot read attachment file '{$this->path}'");
         }
@@ -69,10 +57,7 @@ class Attachment extends AbstractEntity {
         return 'data:' . $this->mimeType . ';base64,' . base64_encode(file_get_contents($this->path));
     }
 
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'fileName',
             'contentType',
@@ -80,12 +65,7 @@ class Attachment extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return $this->getKnownProperties();
     }
-
-
 }

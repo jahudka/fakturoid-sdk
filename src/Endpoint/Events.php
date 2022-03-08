@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -9,36 +10,21 @@ use Jahudka\FakturoidSDK\Entity\Event;
 use Jahudka\FakturoidSDK\MemberAccessException;
 
 /**
- * @method Event get(int $id)
- * @method Event[] getIterator(int $offset = null, int $limit = null)
- *
+ * @extends AbstractEndpoint<Event>
  * @property-read Events $paid
  */
 class Events extends AbstractEndpoint {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @param Client $api
-     */
     public function __construct(Client $api) {
         parent::__construct($api, 'accounts/' . $api->getSlug() . '/events', Event::class);
     }
 
-    /**
-     * @return array
-     */
-    public function getKnownOptions() {
+    public function getKnownOptions(): array {
         return [];
     }
 
-    /**
-     * @param string $name
-     * @return Events
-     * @throws MemberAccessException
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         if ($this->original && $name === 'paid') {
             $endpoint = clone $this;
             $endpoint->url .= '/' . $name;

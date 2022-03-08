@@ -1,56 +1,40 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK;
 
 use GuzzleHttp\Psr7\Response;
-use function GuzzleHttp\json_decode;
 
 
+/**
+ * @template T of AbstractEntity
+ */
 abstract class AbstractEndpoint implements \IteratorAggregate {
-
-    /** @var Client */
-    protected $api;
-
-    /** @var string */
-    protected $url;
-
-    /** @var string */
-    protected $entityClass;
-
-    /** @var array */
-    protected $options = [];
-
-    /** @var bool */
-    protected $original = true;
-
-    /** @var bool */
-    protected $readonly = false;
+    protected Client $api;
+    protected string $url;
+    /** @var class-string<T> */
+    protected string $entityClass;
+    protected array $options = [];
+    protected bool $original = true;
+    protected bool $readonly = false;
 
 
     /**
-     * @param Client $api
-     * @param string $url
-     * @param string $entityClass
+     * @param class-string<T> $entityClass
      */
-    public function __construct(Client $api, $url, $entityClass) {
+    public function __construct(Client $api, string $url, string $entityClass) {
         $this->api = $api;
         $this->url = $url;
         $this->entityClass = $entityClass;
     }
 
-    /**
-     * @return array
-     */
-    protected abstract function getKnownOptions();
+    protected abstract function getKnownOptions(): array;
 
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function setOption($option, $value) {
+    public function setOption(string $option, $value) {
         if ($this->original) {
             $endpoint = clone $this;
             return $endpoint->setOption($option, $value);
@@ -65,9 +49,7 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
     }
 
     /**
-     * @param array $options
      * @return $this
-     * @throws \InvalidArgumentException
      */
     public function setOptions(array $options) {
         if ($this->original) {
@@ -85,11 +67,9 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
 
 
     /**
-     * @param int $offset
-     * @param int $limit
-     * @return \Iterator|AbstractEntity[]
+     * @return EndpointIterator<T>
      */
-    public function getIterator($offset = null, $limit = null) {
+    public function getIterator(?int $offset = null, ?int $limit = null): EndpointIterator {
         return new EndpointIterator(
             $this->api,
             $this->url . '.json',
@@ -101,31 +81,27 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
     }
 
     /**
-     * @param int $id
-     * @return AbstractEntity
+     * @return T
      */
-    public function get($id) {
+    public function get(int $id): AbstractEntity {
         $response = $this->api->sendRequest($this->url . '/' . $id . '.json');
         $payload = json_decode($response->getBody()->getContents(), true);
         return new $this->entityClass($payload);
     }
 
     /**
-     * @param array $data
-     * @return AbstractEntity
+     * @return T
      */
-    public function create(array $data) {
+    public function create(array $data): AbstractEntity {
         unset($data['id']);
         return $this->save(new $this->entityClass($data));
     }
 
     /**
-     * @param AbstractEntity $entity
-     * @return AbstractEntity
-     * @throws ReadonlyEndpointException
-     * @throws \InvalidArgumentException
+     * @param T $entity
+     * @return T
      */
-    public function save(AbstractEntity $entity) {
+    public function save(AbstractEntity $entity): AbstractEntity {
         if ($this->readonly) {
             throw new ReadonlyEndpointException();
         } else if (get_class($entity) !== $this->entityClass) {
@@ -159,9 +135,8 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
     }
 
     /**
-     * @param AbstractEntity|int $entity
+     * @param T|int $entity
      * @return $this
-     * @throws ReadonlyEndpointException
      */
     public function delete($entity) {
         if ($this->readonly) {
@@ -183,11 +158,7 @@ abstract class AbstractEndpoint implements \IteratorAggregate {
         return $this;
     }
 
-    /**
-     * @param Response $response
-     * @param int $expectedStatus
-     */
-    protected function assertStatus(Response $response, $expectedStatus) {
+    protected function assertStatus(Response $response, int $expectedStatus): void {
         if ($response->getStatusCode() !== $expectedStatus) {
             throw new \RuntimeException('Invalid response code: ' . $response->getStatusCode() . ", expected $expectedStatus");
         }

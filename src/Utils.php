@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK;
 
-
 class Utils {
 
-    /**
-     * @param array $data
-     * @return array
-     */
-    public static function toCamelKeys(array $data) {
+    public static function toCamelKeys(array $data): array {
         $result = [];
 
         foreach ($data as $key => $value) {
@@ -20,19 +16,11 @@ class Utils {
         return $result;
     }
 
-    /**
-     * @param string $key
-     * @return string
-     */
-    public static function toCamelCase($key) {
+    public static function toCamelCase(string $key): string {
         return preg_replace_callback('/_(.)/', function($m) { return strtoupper($m[1]); }, $key);
     }
 
-    /**
-     * @param array $data
-     * @return array
-     */
-    public static function toPascalKeys(array $data) {
+    public static function toPascalKeys(array $data): array {
         $result = [];
 
         foreach ($data as $key => $value) {
@@ -42,28 +30,21 @@ class Utils {
         return $result;
     }
 
-    /**
-     * @param string $key
-     * @return string
-     */
-    public static function toPascalCase($key) {
+    public static function toPascalCase(string $key): string {
         return preg_replace_callback('/([A-Z])/', function($m) { return '_' . strtolower($m[1]); }, $key);
     }
 
     /**
      * @param \DateTime|string|int|null $value
-     * @return string|null
      */
-    public static function formatDate($value) {
+    public static function formatDate($value): ?string {
         return self::formatDateTime($value, 'Y-m-d');
     }
 
     /**
      * @param \DateTime|string|int|null $value
-     * @param string $format
-     * @return string|null
      */
-    public static function formatDateTime($value, $format = 'c') {
+    public static function formatDateTime($value, string $format = 'c'): ?string {
         if ($value === null) {
             return null;
         } else if ($value instanceof \DateTime) {

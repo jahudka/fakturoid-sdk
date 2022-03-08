@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Endpoint;
 
@@ -7,29 +8,19 @@ use Jahudka\FakturoidSDK\AbstractEndpoint;
 use Jahudka\FakturoidSDK\Client;
 use Jahudka\FakturoidSDK\Entity\Todo;
 use Jahudka\FakturoidSDK\Utils;
-use function GuzzleHttp\json_decode;
 
 
 /**
- * @method Todo get(int $id)
- * @method Todo[] getIterator(int $offset = null, int $limit = null)
+ * @extends AbstractEndpoint<Todo>
  */
 class Todos extends AbstractEndpoint {
+    protected bool $readonly = true;
 
-    /** @var bool */
-    protected $readonly = true;
-
-    /**
-     * @param Client $api
-     */
     public function __construct(Client $api) {
         parent::__construct($api, 'accounts/' . $api->getSlug() . '/todos', Todo::class);
     }
 
-    /**
-     * @return array
-     */
-    public function getKnownOptions() {
+    public function getKnownOptions(): array {
         return [
             'since',
         ];
@@ -45,9 +36,8 @@ class Todos extends AbstractEndpoint {
 
     /**
      * @param Todo|int $todo
-     * @return Todo
      */
-    public function markAsCompleted($todo) {
+    public function markAsCompleted($todo): Todo {
         if ($todo instanceof Todo) {
             $id = $todo->getId();
         } else {

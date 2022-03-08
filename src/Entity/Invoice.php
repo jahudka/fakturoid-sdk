@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -35,15 +36,15 @@ use Jahudka\FakturoidSDK\Utils;
  * @property-read string $token
  * @property-read string $status
  * @property string $orderNumber
- * @property \DateTime $issuedOn
- * @property \DateTime $taxableFulfillmentDue
+ * @property \DateTimeImmutable $issuedOn
+ * @property \DateTimeImmutable $taxableFulfillmentDue
  * @property int $due
- * @property-read \DateTime $dueOn
- * @property-read \DateTime $sentAt
- * @property-read \DateTime $paidAt
- * @property-read \DateTime $reminderSentAt
- * @property-read \DateTime $acceptedAt
- * @property \DateTime $canceledAt
+ * @property-read \DateTimeImmutable $dueOn
+ * @property-read \DateTimeImmutable $sentAt
+ * @property-read \DateTimeImmutable $paidAt
+ * @property-read \DateTimeImmutable $reminderSentAt
+ * @property-read \DateTimeImmutable $acceptedAt
+ * @property \DateTimeImmutable $canceledAt
  * @property string $note
  * @property string $footerNote
  * @property string $privateNote
@@ -86,15 +87,15 @@ use Jahudka\FakturoidSDK\Utils;
  * @method string getToken()
  * @method string getStatus()
  * @method string getOrderNumber()
- * @method \DateTime getIssuedOn()
- * @method \DateTime getTaxableFulfillmentDue()
+ * @method \DateTimeImmutable getIssuedOn()
+ * @method \DateTimeImmutable getTaxableFulfillmentDue()
  * @method int getDue()
- * @method \DateTime getDueOn()
- * @method \DateTime getSentAt()
- * @method \DateTime getPaidAt()
- * @method \DateTime getReminderSentAt()
- * @method \DateTime getAcceptedAt()
- * @method \DateTime getCanceledAt()
+ * @method \DateTimeImmutable getDueOn()
+ * @method \DateTimeImmutable getSentAt()
+ * @method \DateTimeImmutable getPaidAt()
+ * @method \DateTimeImmutable getReminderSentAt()
+ * @method \DateTimeImmutable getAcceptedAt()
+ * @method \DateTimeImmutable getCanceledAt()
  * @method string getNote()
  * @method string getFooterNote()
  * @method string getPrivateNote()
@@ -170,8 +171,8 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setCorrection(bool $correction)
  * @method $this setCorrectionId(int $correctionId)
  * @method $this setOrderNumber(string $orderNumber)
- * @method $this setIssuedOn(\DateTime|string|int $issuedOn)
- * @method $this setTaxableFulfillmentDue(\DateTime|string|int $taxableFulfillmentDue)
+ * @method $this setIssuedOn(\DateTimeImmutable|string|int $issuedOn)
+ * @method $this setTaxableFulfillmentDue(\DateTimeImmutable|string|int $taxableFulfillmentDue)
  * @method $this setDue(int $due)
  * @method $this setNote(string $note)
  * @method $this setFooterNote(string $footerNote)
@@ -184,11 +185,7 @@ use Jahudka\FakturoidSDK\Utils;
  * @method $this setRoundTotal(bool $roundTotal)
  */
 class Invoice extends AbstractBillable {
-
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return array_merge(parent::getKnownProperties(), [
             'customId',
             'proforma',
@@ -243,10 +240,7 @@ class Invoice extends AbstractBillable {
         ]);
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return array_merge(parent::getReadonlyProperties(), [
             'yourName',
             'yourStreet',
@@ -279,23 +273,15 @@ class Invoice extends AbstractBillable {
         ]);
     }
 
-    /**
-     * @param string $name
-     * @return \DateTime|mixed|null
-     */
-    public function __get($name) {
+    public function __get(string $name) {
         if (in_array($name, ['issuedOn', 'taxableFulfillmentDue', 'dueOn', 'sentAt', 'paidAt', 'reminderSentAt', 'acceptedAt', 'canceledAt'], true)) {
-            return isset($this->data[$name]) ? new \DateTime($this->data[$name]) : null;
+            return isset($this->data[$name]) ? new \DateTimeImmutable($this->data[$name]) : null;
         }
 
         return parent::__get($name);
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set($name, $value) {
+    public function __set(string $name, $value): void {
         if (in_array($name, ['issuedOn', 'taxableFulfillmentDue'], true)) {
             $this->data[$name] = Utils::formatDate($value);
             return;
@@ -303,6 +289,4 @@ class Invoice extends AbstractBillable {
 
         parent::__set($name, $value);
     }
-
-
 }

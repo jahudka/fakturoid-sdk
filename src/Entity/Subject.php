@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Jahudka\FakturoidSDK\Entity;
 
@@ -30,7 +31,7 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  * @property-read string $avatarUrl
  * @property-read string $htmlUrl
  * @property-read string $url
- * @property-read \DateTime $updatedAt
+ * @property-read \DateTimeImmutable $updatedAt
  *
  * @method int getId()
  * @method string getCustomId()
@@ -101,10 +102,7 @@ use Jahudka\FakturoidSDK\AbstractEntity;
  */
 class Subject extends AbstractEntity {
 
-    /**
-     * @return array
-     */
-    public function getKnownProperties() {
+    public function getKnownProperties(): array {
         return [
             'id',
             'customId',
@@ -133,10 +131,7 @@ class Subject extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function getReadonlyProperties() {
+    public function getReadonlyProperties(): array {
         return [
             'avatarUrl',
             'htmlUrl',
@@ -145,11 +140,7 @@ class Subject extends AbstractEntity {
         ];
     }
 
-    /**
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt() {
-        return isset($this->data['updatedAt']) ? new \DateTime($this->data['updatedAt']) : null;
+    public function getUpdatedAt(): ?\DateTimeImmutable {
+        return isset($this->data['updatedAt']) ? new \DateTimeImmutable($this->data['updatedAt']) : null;
     }
-
 }
