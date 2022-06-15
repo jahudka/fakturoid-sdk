@@ -17,7 +17,7 @@ use Jahudka\FakturoidSDK\Utils;
  *
  * @method $this markAsSent(Invoice|int $invoice)
  * @method $this deliver(Invoice|int $invoice)
- * @method $this pay(Invoice|int $invoice, \DateTime|string|int $paidAt = null)
+ * @method $this pay(Invoice|int $invoice, \DateTimeInterface|string|int $paidAt = null)
  * @method $this payProforma(Invoice|int $invoice)
  * @method $this payPartialProforma(Invoice|int $invoice)
  * @method $this removePayment(Invoice|int $invoice)
@@ -47,7 +47,7 @@ class Invoices extends AbstractBillable {
     }
 
     /**
-     * @param \DateTime|string|int $date
+     * @param \DateTimeInterface|string|int $date
      * @return $this
      */
     public function until($date) {
@@ -55,7 +55,7 @@ class Invoices extends AbstractBillable {
     }
 
     /**
-     * @param \DateTime|string|int $date
+     * @param \DateTimeInterface|string|int $date
      * @return $this
      */
     public function updatedUntil($date) {

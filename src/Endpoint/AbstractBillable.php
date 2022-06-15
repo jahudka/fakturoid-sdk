@@ -34,7 +34,7 @@ abstract class AbstractBillable extends AbstractEndpoint  {
 
     /**
      * @param T|int $expense
-     * @param \DateTime|string|int $paidAt
+     * @param \DateTimeInterface|string|int $paidAt
      * @return $this
      */
     public function pay($expense, $paidAt = null) {

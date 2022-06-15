@@ -14,7 +14,7 @@ trait DateFilterableTrait {
     public abstract function setOption(string $option, $value);
 
     /**
-     * @param \DateTime|string|int $date
+     * @param \DateTimeInterface|string|int $date
      * @return $this
      */
     public function since($date) {
@@ -22,7 +22,7 @@ trait DateFilterableTrait {
     }
 
     /**
-     * @param \DateTime|string|int $date
+     * @param \DateTimeInterface|string|int $date
      * @return $this
      */
     public function updatedSince($date) {

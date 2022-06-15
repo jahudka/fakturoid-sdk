@@ -35,19 +35,19 @@ class Utils {
     }
 
     /**
-     * @param \DateTime|string|int|null $value
+     * @param \DateTimeInterface|string|int|null $value
      */
     public static function formatDate($value): ?string {
         return self::formatDateTime($value, 'Y-m-d');
     }
 
     /**
-     * @param \DateTime|string|int|null $value
+     * @param \DateTimeInterface|string|int|null $value
      */
     public static function formatDateTime($value, string $format = 'c'): ?string {
         if ($value === null) {
             return null;
-        } else if ($value instanceof \DateTime) {
+        } else if ($value instanceof \DateTimeInterface) {
             return $value->format($format);
         } else {
             return date($format, is_string($value) ? strtotime($value) : $value);

@@ -27,7 +27,7 @@ class Todos extends AbstractEndpoint {
     }
 
     /**
-     * @param \DateTime|string|int $date
+     * @param \DateTimeInterface|string|int $date
      * @return $this
      */
     public function since($date) {
