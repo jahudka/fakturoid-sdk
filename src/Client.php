@@ -23,7 +23,7 @@ use GuzzleHttp\Psr7\Response;
 class Client {
 
     const API_URL = 'https://app.fakturoid.cz/api/v2',
-        ITEMS_PER_PAGE = 20;
+        ITEMS_PER_PAGE = 40;
 
 
     /** @var HttpClient */
